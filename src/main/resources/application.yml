@@ -1,0 +1,17 @@
+spring:
+  datasource:
+#    url: jdbc:mysql://localhost:3306/svs?useSSL=false&serverTimezone=UTC
+    url: jdbc:oracle:thin:@//192.168.1.103:1521/orcl
+    username: zfapp
+    password: zfapp
+  dubbo:
+    application:
+      name: Eartheqake-API-Provider
+#    registry:
+#      address: zookeeper://127.0.0.1:2181
+#    protocol:
+#      name: dubbo
+#      port: 20883
+#    scan: turui.eartheqake.core.mapper
+server:
+  port: 9001
