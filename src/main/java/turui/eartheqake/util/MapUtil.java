@@ -1,6 +1,7 @@
 package turui.eartheqake.util;
 
 import org.springframework.stereotype.Component;
+import turui.eartheqake.core.pojo.file.MyFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -89,6 +90,19 @@ public class MapUtil {
         map.put("msg", msg);
         map.put("ret", ret);
         return map;
+    }
+
+    public static Map<String ,Object> uploadMap(MyFile myFile, String url, String msg, int ret){
+        Map<String, Object> reqMap = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
+        map.put("code", 2);
+        map.put("url", url);
+        map.put("msg", msg);
+        map.put("file", myFile);
+        reqMap.put("msg", msg);
+        reqMap.put("data", map);
+        reqMap.put("ret", ret);
+        return reqMap;
     }
 
     public static Map<String ,Object> requestUserMap(Map data, String msg, int ret)

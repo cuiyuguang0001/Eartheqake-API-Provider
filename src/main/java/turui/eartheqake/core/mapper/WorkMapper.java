@@ -31,12 +31,12 @@ public interface WorkMapper {
     @Select("select count(0) from zf_eq_form")
     int eqFormListCount();
 
-    @Select("select id, eqid, formid, uuid, title, address, dateline from " +
+    @Select("select id, eqid, formid, uuid, title, address, dateline, datakey from " +
             "(SELECT A.*, ROWNUM RN FROM zf_eq_form_record A WHERE ROWNUM <= #{n} " +
             "and eqid = #{eqid} " +
             "and formid = #{formid} " +
             "and uuid = #{uid})" +
-            "where RN > #{p}")
+            "where RN > #{p} order by dateline desc")
     @Results(value = {
             @Result(column = "uuid", property = "uid")
     })
@@ -57,7 +57,7 @@ public interface WorkMapper {
      * @param eq
      * @return
      */
-    @Insert("insert into zf_eq_form_record(eqid, formid, uuid, title, address, dateline) " +
-            "values(#{eqid}, #{formid}, #{uid}, #{title}, #{address}, #{dateline})")
+    @Insert("insert into zf_eq_form_record(eqid, formid, uuid, title, address, dateline, datakey) " +
+            "values(#{eqid}, #{formid}, #{uid}, #{title}, #{address}, #{dateline}, #{datakey})")
     boolean EQFormRecordAdd(EQ_form_record eq);
 }

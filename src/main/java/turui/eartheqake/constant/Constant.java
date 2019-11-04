@@ -41,5 +41,9 @@ public class Constant {
 
 
     //文件上传地址
-    public static final String FILE_PATH = "resources/public";
+    public static final String FILE_PATH = "/static/public";
+    public static final String RESOURCES_PATH = System.getProperty("user.dir") + "/src/main/resources";
+
+    //项目port路径
+    public static final String PROJECT_IP = "http://192.168.1.149:9001";
 }

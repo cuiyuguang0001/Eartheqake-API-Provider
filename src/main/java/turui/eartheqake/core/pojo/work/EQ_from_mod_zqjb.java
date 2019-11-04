@@ -19,6 +19,16 @@ public class EQ_from_mod_zqjb {
     private String zhqk;
     //附件是否存在
     private String fj;
+    //json
+    private String data;
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
 
     public int getId() {
         return id;

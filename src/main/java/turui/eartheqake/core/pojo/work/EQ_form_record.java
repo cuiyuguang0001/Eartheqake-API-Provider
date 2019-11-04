@@ -19,6 +19,16 @@ public class EQ_form_record {
     private String dateline;
     //mod表关联
     private String mid;
+    //dataKey
+    private String datakey;
+
+    public String getDatakey() {
+        return datakey;
+    }
+
+    public void setDatakey(String datakey) {
+        this.datakey = datakey;
+    }
 
     public String getMid() {
         return mid;

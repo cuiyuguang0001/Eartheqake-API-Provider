@@ -1,24 +1,22 @@
 package turui.eartheqake.core.config;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import turui.eartheqake.core.adapter.LoginAdapter;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
-public class WebMvcConfig implements WebMvcConfigurer {
-
-    @Autowired
-    LoginAdapter loginAdapter;
-
+public class WebMvcConfig extends WebMvcConfigurerAdapter  {
 
     @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-
-//        InterceptorRegistration in = registry.addInterceptor(loginAdapter);
-//        in.addPathPatterns("/Site/*");
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        String path = System.getProperty("user.dir") + "/src/main/resources/static/";
+        String os = System.getProperty("os.name");
+        System.out.println(System.getProperty("os.name"));
+        if (os.toLowerCase().startsWith("win")) {
+            registry.addResourceHandler("/static/**").
+                    addResourceLocations("file:"+path);
+        }
+        super.addResourceHandlers(registry);
     }
 }

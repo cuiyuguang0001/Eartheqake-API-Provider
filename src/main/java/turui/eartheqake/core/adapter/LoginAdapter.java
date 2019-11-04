@@ -10,13 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginAdapter extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        System.out.println("----------");
-        System.out.println(request.getRequestURI());
-        System.out.println(request.getContextPath());
-        System.out.println(request.getRequestURI());
-        System.out.println(request.getQueryString());
-        System.out.println(request.getAttribute("ac"));
-        System.out.println(response.getHeader("ac"));
+
 
         if(request.getParameter("sid") != null)
         {

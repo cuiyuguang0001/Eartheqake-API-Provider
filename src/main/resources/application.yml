@@ -1,12 +1,24 @@
+
 spring:
+  resources:
+    #这个节点配置是设置静态文件存放的路径
+    static-locations: classpath:/static
+  mvc:
+    static-path-pattern: /static/**
   datasource:
 #    url: jdbc:mysql://localhost:3306/svs?useSSL=false&serverTimezone=UTC
     url: jdbc:oracle:thin:@//192.168.1.103:1521/orcl
     username: zfapp
+#    username: root
+#    password: x5
     password: zfapp
   dubbo:
     application:
       name: Eartheqake-API-Provider
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 50MB
 #    registry:
 #      address: zookeeper://127.0.0.1:2181
 #    protocol:

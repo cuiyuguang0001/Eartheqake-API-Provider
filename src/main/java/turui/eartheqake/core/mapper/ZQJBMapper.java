@@ -13,8 +13,8 @@ public interface ZQJBMapper {
      * @param eq
      * @return
      */
-    @Insert("insert into zf_eq_form_mod_zqjb(xzq, xxmc, jd, wd, zqlx, zhqk, fj) " +
-            "values(#{xzq}, #{xxmc}, #{jd}, #{wd}, #{zqlx}, #{zhqk}, #{fj})")
+    @Insert("insert into zf_eq_form_mod_zqjb(xzq, xxmc, jd, wd, zqlx, zhqk, fj, data) " +
+            "values(#{xzq}, #{xxmc}, #{jd}, #{wd}, #{zqlx}, #{zhqk}, #{fj}, #{data})")
     @SelectKey(keyProperty = "id",resultType = int.class, before = false, statement = "select max(id) id from zf_eq_form_mod_zqjb")
     boolean zqjbAdd(EQ_from_mod_zqjb eq);
 

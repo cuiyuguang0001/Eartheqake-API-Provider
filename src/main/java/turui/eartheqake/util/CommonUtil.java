@@ -1,10 +1,12 @@
 package turui.eartheqake.util;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 public class CommonUtil {
 
@@ -71,6 +73,23 @@ public class CommonUtil {
         Timestamp timestamp = new Timestamp(dateline*1000);
         SimpleDateFormat df = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");//定义格式，不显示毫秒
         return df.format(timestamp);
+    }
+
+    /**
+     * JSON转换为Map
+     * @param jsonStr
+     * @return
+     */
+    public static Map<String, String> parseToMap(String jsonStr){
+        JSONObject jsonObj = JSON.parseObject(jsonStr);
+        Set<String> jsonKeySet = jsonObj.keySet();
+        Map<String, String> resultMap = new HashMap<>();
+        Iterator<String> it = jsonKeySet.iterator();
+        while (it.hasNext()) {
+            String key = it.next();
+            resultMap.put(key, jsonObj.getString(key));
+        }
+        return resultMap;
     }
 
 }
