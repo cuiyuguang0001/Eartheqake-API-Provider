@@ -26,6 +26,7 @@ public class Constant {
     public static final String NOT_SUCCESS_ADD = "信息添加失败";
 
     public static final String SUCCESS_UPDATE = "信息修改成功";
+    public static final String NOT_SUCCESS_UPDATE = "信息修改失败";
 
     public static final String SUCCESS_REMOVE = "信息删除成功";
     public static final String NOT_SUCCESS_REMOVE = "信息删除失败";

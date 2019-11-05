@@ -16,7 +16,12 @@ public class User {
     //用户分组
     private String gid;
 
+    public User(){}
 
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
     public String getSalt() {
         return salt;

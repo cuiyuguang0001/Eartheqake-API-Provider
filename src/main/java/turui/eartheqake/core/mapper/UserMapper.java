@@ -89,5 +89,20 @@ public interface UserMapper {
      * @return
      */
     @Update("update zf_user set password = #{pwd}, salt = #{salt} where id = #{id}")
-    int updateUserPwd(String id, String pwd, String salt);
+    boolean updateUserPwd(String id, String pwd, String salt, String username);
+
+    /**
+     * 修改用户信息
+     * @param user_profile
+     * @return
+     */
+    @Update("<script>" +
+            "update zf_user_profile<set>" +
+            "<if test='nickname != null'>nickname = #{nickname}, </if>" +
+            "<if test='headimg != null'>headimg = #{headimg}, </if>" +
+            "<if test='desc != null'>udesc = #{desc}</if>" +
+            "</set>" +
+            "where uuid = #{uid}" +
+            "</script>")
+    boolean userProfileEdit(User_profile user_profile);
 }

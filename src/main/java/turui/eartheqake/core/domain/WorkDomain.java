@@ -148,12 +148,14 @@ public class WorkDomain {
 //        添加zqjb表信息
         if (zqjbMapper.zqjbAdd(eq)) {
 //            添加eq_form_mod_record表信息
-            if (!eqFormModRecordAdd(eq, session.getUid(), dataMap.get("eqid"), httpServletRequest.getParameter("datakey")))
+            if (!eqFormModRecordAdd(eq.getXzq(), eq.getXxmc(), eq.getId() + "",
+                    session.getUid(), dataMap.get("eqid"),
+                    httpServletRequest.getParameter("datakey")))
                 return null;
 //            添加filefollow表信息
-            if(!fileDomain.fileFollowAdd(eq, "eq_form_mod_zqjb", fileArray))
-                return null;
-
+            if(eq.getFj().equals("0"))
+                if(!fileDomain.fileFollowAdd(eq.getId() + "", "eq_form_mod_zqjb", fileArray))
+                    return null;
             return MapUtil.requestUpdateMap(Constant.SUCCESS_REQUEST, Constant.GOOD_REQUEST, 1, Constant.SUCCESS_ADD);
         } else {
             return null;
@@ -179,37 +181,54 @@ public class WorkDomain {
         if(session == null || session.getUid().equals("0"))
             return MapUtil.requestMap(null,Constant.NOT_SUCCESS_KEEP_LOGIN, Constant.BAD_REQUEST);
 
+        String data = httpServletRequest.getParameter("data");
+
+        Map<String, String> dataMap = CommonUtil.parseToMap(data);
+        //解析location
+        Map<String, String> locationDataMap = CommonUtil.parseToMap(dataMap.get("location"));
+        String files = dataMap.get("files");
+        String[] fileArray = (files.substring(1, files.length() - 1)).split(",");
+        String dtdcs = dataMap.get("dtdcs");
+        String[] dtdcArray = (dtdcs.substring(1, dtdcs.length() - 1)).split(",");
+
         //创建fwdc实体类
         EQ_form_mod_fwdc fwdc = new EQ_form_mod_fwdc();
-        fwdc.setXzq(httpServletRequest.getParameter("xzq"));
-        fwdc.setXxmc(httpServletRequest.getParameter("xxmc"));
-        fwdc.setJd(httpServletRequest.getParameter("jd"));
-        fwdc.setWd(httpServletRequest.getParameter("wd"));
-        fwdc.setLdnd(httpServletRequest.getParameter("ldnd"));
-        fwdc.setQtdc(httpServletRequest.getParameter("qtdc"));
-        fwdc.setZqms(httpServletRequest.getParameter("zqms"));
-        String fids = httpServletRequest.getParameter("fids");
-        String dids = httpServletRequest.getParameter("dids");
-        fwdc.setFj((fids == null || fids.equals("")) ? "0" : "1");
-        fwdc.setDtdc((dids == null || dids.equals("")) ? "0" : "1");
+        fwdc.setXzq(locationDataMap.get("address"));
+        fwdc.setXxmc(locationDataMap.get("poiName"));
+        fwdc.setJd(locationDataMap.get("latitude"));
+        fwdc.setWd(locationDataMap.get("longitude"));
+
+        //解析data
+        locationDataMap = CommonUtil.parseToMap(dataMap.get("data"));
+        fwdc.setLdnd(locationDataMap.get("ldnd"));
+        fwdc.setQtdc(locationDataMap.get("qtdc"));
+        fwdc.setZqms(locationDataMap.get("zqms"));
+
+        fwdc.setFj((fileArray == null || fileArray.length == 0 || fileArray[0].equals("")) ? "0" : "1");
+        fwdc.setDtdc((dtdcArray == null || dtdcArray.length == 0 || dtdcArray[0].equals("")) ? "0" : "1");
 
         //fwdc表添加一条信息，filefollow表添加多条信息
-//        if(fwdcMapper.fwdcAdd(fwdc) && fileDomain.fileFollowAdd(fids,fwdc.getId() + "", "fwdc"))
-//        {
-//            if(!eqFormModRecordAdd(httpServletRequest, fwdc.getId() + "", session.getUid()))
-//                return null;
-//
-//            String[] split = dids.split(",");
-//            for(int i = 0; i < split.length; i++)
-//            {
-//                EQ_form_mod_dtdc_follow dtdc_follow = new EQ_form_mod_dtdc_follow();
-//                dtdc_follow.setDid(split[i]);
-//                dtdc_follow.setFid(fwdc.getId() + "");
-//                if(!fwdcMapper.dtdcFollowAdd(dtdc_follow))
-//                    return null;
-//            }
-//            return MapUtil.requestMap(fwdc, Constant.SUCCESS_ADD, Constant.GOOD_REQUEST);
-//        }
+        if(fwdcMapper.fwdcAdd(fwdc))
+        {
+            if(fwdc.getFj().equals("1"))
+                if(!fileDomain.fileFollowAdd(fwdc.getId() + "", "eq_form_mod_fwdc", fileArray))
+                    return null;
+
+            if(!eqFormModRecordAdd(fwdc.getXzq(), fwdc.getXxmc(), fwdc.getId() + "",
+                    session.getUid(), dataMap.get("eqid"),
+                    httpServletRequest.getParameter("datakey")))
+                return null;
+
+            for(int i = 0; i < dtdcArray.length; i++)
+            {
+                EQ_form_mod_dtdc_follow dtdc_follow = new EQ_form_mod_dtdc_follow();
+                dtdc_follow.setDid(dtdcArray[i]);
+                dtdc_follow.setFid(fwdc.getId() + "");
+                if(!fwdcMapper.dtdcFollowAdd(dtdc_follow))
+                    return null;
+            }
+            return MapUtil.requestUpdateMap(Constant.SUCCESS_REQUEST, Constant.GOOD_REQUEST, 1, Constant.SUCCESS_ADD);
+        }
 
         return null;
     }
@@ -243,21 +262,24 @@ public class WorkDomain {
         return null;
     }
 
+
+
+    //通用方法
     /**
      * 添加zf_eq_form_record表信息
      * @param
      * @return
      */
-    public boolean eqFormModRecordAdd(EQ_from_mod_zqjb eq, String uid, String eqid, String datakey)
+    public boolean eqFormModRecordAdd(String xzq, String xxmc, String id, String uid, String eqid, String datakey)
     {
         EQ_form_record form = new EQ_form_record();
-        form.setAddress(eq.getXzq());
-        form.setTitle(eq.getXxmc());
+        form.setAddress(xzq);
+        form.setTitle(xxmc);
         form.setDateline(CommonUtil.getTineLine());
         form.setUid(uid);
         form.setEqid(eqid);
         form.setFormid(workMapper.eqFormList("zqjb").get(0).getId() + "");
-        form.setMid(eq.getId() + "");
+        form.setMid(id);
         form.setDatakey(datakey);
         return workMapper.EQFormRecordAdd(form);
     }

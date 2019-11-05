@@ -6,6 +6,7 @@ import turui.eartheqake.constant.Constant;
 import turui.eartheqake.core.pojo.user.Session;
 import turui.eartheqake.core.mapper.UserMapper;
 import turui.eartheqake.core.pojo.user.User;
+import turui.eartheqake.core.pojo.user.User_profile;
 import turui.eartheqake.util.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -117,22 +118,6 @@ public class UserDomain {
             {
                 return MapUtil.requestMap(userMessage(session, loginUser), Constant.SUCCESS_REQUEST, Constant.GOOD_REQUEST);
             }
-//            String sid = httpServletRequest.getParameter("sid");
-//            if(sid != null)
-//            {
-//                userMapper.sessionEditUuid(loginUser.getId(),sid);
-//                Session session = userMapper.sessionModelBySid(sid);
-//                if(session != null)
-//                {
-//                    return MapUtil.requestMap(session, Constant.SUCCESS_REQUEST, Constant.GOOD_REQUEST);
-//                }
-//            }else {
-//                Session session = userMapper.sessionModelByUuid(loginUser.getId());
-//                if(session != null)
-//                {
-//                    return MapUtil.requestMap(session, Constant.SUCCESS_REQUEST, Constant.GOOD_REQUEST);
-//                }
-//            }
             Session reqSession = addSession(httpServletRequest, loginUser.getId(), UUIDUtil.getUUID());
 
             return MapUtil.requestMap(userMessage(reqSession, loginUser), Constant.SUCCESS_REQUEST, Constant.GOOD_REQUEST);
@@ -141,25 +126,54 @@ public class UserDomain {
         }
     }
 
-    public Map<String ,Object> UpdatePwd(HttpServletRequest httpServletRequest)
+    /**
+     * 修改账号密码
+     * @param httpServletRequest
+     * @return
+     */// TODO: 2019/11/5  
+    public Map<String ,Object> UserLoginEdit(HttpServletRequest httpServletRequest)
     {
-        LogUtil.doLog("进入UpdatePwd方法");
+        LogUtil.doLog("UserLoginEdit");
         //查询是否登陆状态
         Session session = getSessionBySid(httpServletRequest.getParameter("sid"));
         if(session == null || session.getUid().equals("0"))
         {
             return MapUtil.requestMap(null,Constant.NOT_SUCCESS_KEEP_LOGIN, Constant.BAD_REQUEST);
         }
-
-        String pwd = httpServletRequest.getParameter("password");
+        String pwd =  httpServletRequest.getParameter("password");
         String salt = UUIDUtil.getUUID().substring(0, 6);
         String mdPwd = MD5Util.md5Encode(MD5Util.md5Encode(pwd) + salt);
-        int req = userMapper.updateUserPwd(session.getUid(), mdPwd, salt);
-        if(req > 0)
-            return MapUtil.requestUpdateMap(Constant.SUCCESS_REQUEST, Constant.GOOD_REQUEST, req, Constant.SUCCESS_UPDATE);
+
+        if(userMapper.updateUserPwd(session.getUid(), mdPwd, salt,
+                httpServletRequest.getParameter("username")))
+            return MapUtil.requestUpdateMap(Constant.SUCCESS_REQUEST, Constant.GOOD_REQUEST, 1, Constant.SUCCESS_UPDATE);
         return null;
 
     }
+
+    public Map<String ,Object> UserProfileEdit(HttpServletRequest httpServletRequest)
+    {
+        LogUtil.doLog("UserProfileEdit");
+        //检查登陆
+        Session session = getSessionBySid(httpServletRequest.getParameter("sid"));
+        if(session == null || session.getUid().equals("0"))
+        {
+            return MapUtil.requestMap(null,Constant.NOT_SUCCESS_KEEP_LOGIN, Constant.BAD_REQUEST);
+        }
+
+        User_profile user_profile = new User_profile(httpServletRequest.getParameter("nickname"),
+                httpServletRequest.getParameter("headimg"),
+                httpServletRequest.getParameter("desc"));
+        user_profile.setUid(session.getUid());
+
+        if(!userMapper.userProfileEdit(user_profile))
+            return MapUtil.requestUpdateMap(Constant.NOT_SUCCESS_UPDATE, Constant.BAD_REQUEST, 0, Constant.NOT_SUCCESS_UPDATE);
+
+        return MapUtil.requestUpdateMap(Constant.SUCCESS_UPDATE, Constant.GOOD_REQUEST, 1, Constant.SUCCESS_UPDATE);
+    }
+
+
+    //通用方法
 
     /**
      * 插入一条session
@@ -236,4 +250,6 @@ public class UserDomain {
 
         return session;
     }
+
+
 }

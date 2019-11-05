@@ -10,6 +10,25 @@ public class User_profile {
     private String nickname;
     //头像
     private String headimg;
+    //简介
+    private String desc;
+
+    public User_profile() {
+    }
+
+    public User_profile(String nickname, String headimg, String desc) {
+        this.nickname = nickname;
+        this.headimg = headimg;
+        this.desc = desc;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String udesc) {
+        this.desc = udesc;
+    }
 
     public String getId() {
         return id;

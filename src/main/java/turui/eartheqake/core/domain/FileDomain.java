@@ -145,7 +145,7 @@ public class FileDomain {
     /**
      * 添加file_follow表信息
      */
-    public boolean fileFollowAdd(EQ_from_mod_zqjb eq, String mod, String[] fileArray)
+    public boolean fileFollowAdd(String id, String mod, String[] fileArray)
     {
         //file_follow表信息
         for(int i = 0; i < fileArray.length; i++)
@@ -155,7 +155,7 @@ public class FileDomain {
             zf.setDateline(CommonUtil.getTineLine());
             zf.setFid(fileArray[i]);
             zf.setMod(mod);
-            zf.setMid(eq.getId() + "");
+            zf.setMid(id);
             //添加zf_file_follow表信息
             if(!workMapper.fileFollowAdd(zf)){
                 return false;
