@@ -45,7 +45,7 @@ public class IndexController {
         String ac = request.getParameter("ac");
         String s = request.getParameter("s");
         if(s == null || ac == null || s.equals("") || ac.equals("")) {
-            return MapUtil.requestMap(null, Constant.BAD_AC,Constant.BAD_REQUEST);
+            return MapUtil.requestMap(null, Constant.BAD_AC);
         }
 
         //开始接口调用
@@ -72,13 +72,13 @@ public class IndexController {
             Map<String, Object> data=(Map<String, Object>)doMethod.invoke(this.applicationContext.getBean(doClass),request);
             if(data == null)
             {
-                return MapUtil.requestMap(null, Constant.BAD_AC,Constant.BAD_REQUEST);
+                return MapUtil.requestMap(Constant.BAD_AC,Constant.BAD_REQUEST);
             }
             return data;
 
         }catch (Exception e){
             e.printStackTrace();
-            return MapUtil.requestMap(null, Constant.BAD_AC,Constant.BAD_REQUEST, 0);
+            return MapUtil.requestMap(Constant.BAD_AC, Constant.BAD_REQUEST);
         }
     }
 

@@ -3,7 +3,6 @@ package turui.eartheqake.constant;
 public class Constant {
 
     //返回状态
-    public static final int GOOD_REQUEST = 200;
     public static final int BAD_REQUEST = 500;
 
     public static final int NOT_URL = 404;

@@ -39,7 +39,7 @@ public class SiteDomain {
         appModel.setPlatform(platform);
         List<AppModel> appModels = siteMapper.appModel(appModel);
         return appModels.size() == 0
-                ? MapUtil.requestMap(null, Constant.NOT_SUCCESS_SESSION, Constant.BAD_REQUEST)
-                : MapUtil.requestMap(siteMapper.appModel(appModel).get(0), Constant.SUCCESS_REQUEST, Constant.GOOD_REQUEST);
+                ? MapUtil.requestMap(null, Constant.NOT_SUCCESS_SESSION)
+                : MapUtil.requestMap(siteMapper.appModel(appModel).get(0), Constant.SUCCESS_REQUEST);
     }
 }

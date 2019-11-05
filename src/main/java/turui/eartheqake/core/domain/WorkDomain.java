@@ -44,7 +44,7 @@ public class WorkDomain {
         LogUtil.doLog("EqList");
         Session session = userDomain.getSessionBySid(httpServletRequest.getParameter("sid"));
         if (session == null || session.getUid().equals("0"))
-            return MapUtil.requestMap(null, Constant.NOT_SUCCESS_KEEP_LOGIN, Constant.BAD_REQUEST);
+            return MapUtil.requestMap(null, Constant.NOT_SUCCESS_KEEP_LOGIN);
 
         int n = Integer.valueOf(httpServletRequest.getParameter("n"));
         int p = (Integer.valueOf(httpServletRequest.getParameter("p")) - 1) * n;
@@ -54,7 +54,6 @@ public class WorkDomain {
         }
         return MapUtil.requestMap(eqs,
                 Constant.SUCCESS_REQUEST,
-                Constant.GOOD_REQUEST,
                 workMapper.eqListCount());
     }
 
@@ -69,11 +68,10 @@ public class WorkDomain {
         //查询是否登陆状态
         Session session = userDomain.getSessionBySid(httpServletRequest.getParameter("sid"));
         if (session == null || session.getUid().equals("0"))
-            return MapUtil.requestMap(null, Constant.NOT_SUCCESS_KEEP_LOGIN, Constant.BAD_REQUEST);
+            return MapUtil.requestMap(null, Constant.NOT_SUCCESS_KEEP_LOGIN);
 
         return MapUtil.requestMap(workMapper.eqFormList(null),
                 Constant.SUCCESS_REQUEST,
-                Constant.GOOD_REQUEST,
                 workMapper.eqListCount());
     }
 
@@ -87,7 +85,7 @@ public class WorkDomain {
         LogUtil.doLog("进入EqFormRecordList");
         Session session = userDomain.getSessionBySid(httpServletRequest.getParameter("sid"));
         if (session == null || session.getUid().equals("0"))
-            return MapUtil.requestMap(null, Constant.NOT_SUCCESS_KEEP_LOGIN, Constant.BAD_REQUEST);
+            return MapUtil.requestMap(null, Constant.NOT_SUCCESS_KEEP_LOGIN);
 
         int n = Integer.valueOf(httpServletRequest.getParameter("n"));
         int p = (Integer.valueOf(httpServletRequest.getParameter("p")) - 1) * n;
@@ -101,7 +99,6 @@ public class WorkDomain {
                 formid,
                 session.getUid(), p, n),
                 Constant.SUCCESS_REQUEST,
-                Constant.GOOD_REQUEST,
                 workMapper.eqFormRecordListCount(httpServletRequest.getParameter("eqid"),
                         formid,
                         session.getUid()));
@@ -123,7 +120,7 @@ public class WorkDomain {
         //检查登陆状态
         Session session = userDomain.getSessionBySid(httpServletRequest.getParameter("sid"));
         if (session == null || session.getUid().equals("0"))
-            return MapUtil.requestMap(null, Constant.NOT_SUCCESS_KEEP_LOGIN, Constant.BAD_REQUEST);
+            return MapUtil.requestMap(null, Constant.NOT_SUCCESS_KEEP_LOGIN);
         String data = httpServletRequest.getParameter("data");
         Map<String, String> dataMap = CommonUtil.parseToMap(data);
         //解析location
@@ -156,7 +153,7 @@ public class WorkDomain {
             if(eq.getFj().equals("0"))
                 if(!fileDomain.fileFollowAdd(eq.getId() + "", "eq_form_mod_zqjb", fileArray))
                     return null;
-            return MapUtil.requestUpdateMap(Constant.SUCCESS_REQUEST, Constant.GOOD_REQUEST, 1, Constant.SUCCESS_ADD);
+            return MapUtil.requestUpdateMap(Constant.SUCCESS_REQUEST, 1, Constant.SUCCESS_ADD);
         } else {
             return null;
         }
@@ -179,7 +176,7 @@ public class WorkDomain {
         //检查登陆状态
         Session session = userDomain.getSessionBySid(httpServletRequest.getParameter("sid"));
         if(session == null || session.getUid().equals("0"))
-            return MapUtil.requestMap(null,Constant.NOT_SUCCESS_KEEP_LOGIN, Constant.BAD_REQUEST);
+            return MapUtil.requestMap(null,Constant.NOT_SUCCESS_KEEP_LOGIN);
 
         String data = httpServletRequest.getParameter("data");
 
@@ -227,7 +224,7 @@ public class WorkDomain {
                 if(!fwdcMapper.dtdcFollowAdd(dtdc_follow))
                     return null;
             }
-            return MapUtil.requestUpdateMap(Constant.SUCCESS_REQUEST, Constant.GOOD_REQUEST, 1, Constant.SUCCESS_ADD);
+            return MapUtil.requestUpdateMap(Constant.SUCCESS_REQUEST, 1, Constant.SUCCESS_ADD);
         }
 
         return null;
@@ -243,7 +240,7 @@ public class WorkDomain {
         //检查登陆状态
         Session session = userDomain.getSessionBySid(httpServletRequest.getParameter("sid"));
         if(session == null || session.getUid().equals("0"))
-            return MapUtil.requestMap(null,Constant.NOT_SUCCESS_KEEP_LOGIN, Constant.BAD_REQUEST);
+            return MapUtil.requestMap(null,Constant.NOT_SUCCESS_KEEP_LOGIN);
 
         EQ_form_mod_dtdc dtdc = new EQ_form_mod_dtdc();
         dtdc.setXzq(httpServletRequest.getParameter("xzq"));
@@ -256,7 +253,7 @@ public class WorkDomain {
         dtdc.setYtlx(httpServletRequest.getParameter("ytlx"));
 
         if(fwdcMapper.dtdcAdd(dtdc)){
-            return MapUtil.requestMap(dtdc, Constant.SUCCESS_REQUEST, Constant.GOOD_REQUEST);
+            return MapUtil.requestMap(dtdc, Constant.SUCCESS_REQUEST);
         }
 
         return null;

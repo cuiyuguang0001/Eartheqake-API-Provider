@@ -38,7 +38,7 @@ public class MessageDomain {
         Session session = userDomain.getSessionBySid(httpServletRequest.getParameter("sid"));
         if(session == null || session.getUid().equals("0"))
         {
-            return MapUtil.requestMap(null,Constant.NOT_SUCCESS_KEEP_LOGIN, Constant.BAD_REQUEST);
+            return MapUtil.requestMap(null,Constant.NOT_SUCCESS_KEEP_LOGIN);
         }
         int n = Integer.valueOf(httpServletRequest.getParameter("n"));
         int p = (Integer.valueOf(httpServletRequest.getParameter("p")) - 1) * n;
@@ -62,7 +62,6 @@ public class MessageDomain {
 
         return MapUtil.requestMap(messageGroupRecords,
                 Constant.SUCCESS_REQUEST,
-                Constant.GOOD_REQUEST,
                 messageMapper.messageGroupListCount(session.getUid()));
     }
 
@@ -79,7 +78,7 @@ public class MessageDomain {
         Session session = userDomain.getSessionBySid(httpServletRequest.getParameter("sid"));
         if(session == null || session.getUid().equals("0"))
         {
-            return MapUtil.requestMap(null,Constant.NOT_SUCCESS_KEEP_LOGIN, Constant.BAD_REQUEST);
+            return MapUtil.requestMap(null,Constant.NOT_SUCCESS_KEEP_LOGIN);
         }
         int n = Integer.valueOf(httpServletRequest.getParameter("n"));
         int p = (Integer.valueOf(httpServletRequest.getParameter("p")) - 1) * n;
@@ -108,7 +107,7 @@ public class MessageDomain {
             }
         }
 
-        Map<String, Object> reqMap = MapUtil.requestMap(messageRecords, Constant.SUCCESS_REQUEST, Constant.GOOD_REQUEST,messageMapper.messageListCount(session.getUid(), gid));
+        Map<String, Object> reqMap = MapUtil.requestMap(messageRecords, Constant.SUCCESS_REQUEST, messageMapper.messageListCount(session.getUid(), gid));
         messageMapper.cleanMessageCount(gid, uuid); //清除未读信息
         gid = null;
         uuid = null;
@@ -127,7 +126,7 @@ public class MessageDomain {
         Session session = userDomain.getSessionBySid(httpServletRequest.getParameter("sid"));
         if(session == null || session.getUid().equals("0"))
         {
-            return MapUtil.requestMap(null,Constant.NOT_SUCCESS_KEEP_LOGIN, Constant.BAD_REQUEST);
+            return MapUtil.requestMap(null,Constant.NOT_SUCCESS_KEEP_LOGIN);
         }
 
         String id = httpServletRequest.getParameter("id");
@@ -146,10 +145,10 @@ public class MessageDomain {
                 message_record.setReadtime(tineLine);
             }
             LogUtil.doLog(message_record.toString());
-            return MapUtil.requestUpdateMap(Constant.SUCCESS_REQUEST, Constant.GOOD_REQUEST, 1, Constant.SUCCESS_UPDATE);
+            return MapUtil.requestUpdateMap(Constant.SUCCESS_REQUEST, 1, Constant.SUCCESS_UPDATE);
         }else
         {
-            return MapUtil.requestMap(null, Constant.NOT_SUCCESS_SELECT, Constant.BAD_REQUEST);
+            return MapUtil.requestMap(null, Constant.NOT_SUCCESS_SELECT);
         }
     }
 

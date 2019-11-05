@@ -65,7 +65,7 @@ public class FileDomain {
         Session session = userDomain.getSessionBySid(httpServletRequest.getParameter("sid"));
         if(session == null || session.getUid().equals("0"))
         {
-            return MapUtil.requestMap(null,Constant.NOT_SUCCESS_KEEP_LOGIN, Constant.BAD_REQUEST);
+            return MapUtil.requestMap(null,Constant.NOT_SUCCESS_KEEP_LOGIN);
         }
 
         Part file = null;
@@ -83,7 +83,7 @@ public class FileDomain {
             MyFile reqFile = fileMapper.fileModel(md5);
             if(reqFile != null)
             {
-                return MapUtil.uploadMap(reqFile,reqFile.getUrl(), Constant.EXIST_FILE, Constant.GOOD_REQUEST);
+                return MapUtil.uploadMap(reqFile,reqFile.getUrl(), Constant.EXIST_FILE);
             }
 
             String content = file.getHeaders("content-disposition").toString();
@@ -117,16 +117,16 @@ public class FileDomain {
 
             if(!fileMapper.fileWrite(target))
             {
-                return MapUtil.uploadMap(null,"", Constant.NOT_SUCCESS_ADD, Constant.BAD_REQUEST);
+                return MapUtil.uploadMap(null,"", Constant.NOT_SUCCESS_ADD);
             }
 
             //文件存储
             file.write(writeUrl);
-            return MapUtil.uploadMap(target,url, Constant.SUCCESS_ADD, Constant.GOOD_REQUEST);
+            return MapUtil.uploadMap(target,url, Constant.SUCCESS_ADD);
 
         } catch (IOException e) {
             e.printStackTrace();
-            return MapUtil.uploadMap(null,"", "文件接收失败", Constant.BAD_REQUEST);
+            return MapUtil.uploadMap(null,"", Constant.NOT_SUCCESS_UPLOAD);
         } catch (ServletException e) {
             e.printStackTrace();
             return null;
@@ -135,7 +135,7 @@ public class FileDomain {
                 file.delete();
             } catch (IOException e) {
                 e.printStackTrace();
-                return MapUtil.uploadMap(null,"", "文件接收失败", Constant.BAD_REQUEST);
+                return MapUtil.uploadMap(null,"", Constant.NOT_SUCCESS_UPLOAD);
             }
 
         }

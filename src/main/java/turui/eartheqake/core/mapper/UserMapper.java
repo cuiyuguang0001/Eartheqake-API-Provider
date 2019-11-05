@@ -76,9 +76,10 @@ public interface UserMapper {
      * @param uid
      * @return
      */
-    @Select("select id, uuid, nickname, headimg from zf_user_profile where uuid = #{uid}")
+    @Select("select id, uuid, nickname, headimg, udesc from zf_user_profile where uuid = #{uid}")
     @Results(value = {
-            @Result(column = "uuid", property = "uid")
+            @Result(column = "uuid", property = "uid"),
+            @Result(column = "udesc", property = "desc")
     })
     User_profile profileModel(String uid);
 
@@ -88,7 +89,7 @@ public interface UserMapper {
      * @param pwd
      * @return
      */
-    @Update("update zf_user set password = #{pwd}, salt = #{salt} where id = #{id}")
+    @Update("update zf_user set username = #{username}, password = #{pwd}, salt = #{salt} where id = #{id}")
     boolean updateUserPwd(String id, String pwd, String salt, String username);
 
     /**

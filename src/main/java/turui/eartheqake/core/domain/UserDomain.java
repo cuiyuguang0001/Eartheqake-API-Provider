@@ -59,11 +59,11 @@ public class UserDomain {
             {
                 User user = new User();
                 user.setId(session.getUid());
-                return MapUtil.requestMap(userMessage(session, user), Constant.SUCCESS_REQUEST, Constant.GOOD_REQUEST);
+                return MapUtil.requestMap(userMessage(session, user), Constant.SUCCESS_REQUEST);
             }
         }
         Session session = addSession(httpServletRequest, "0", UUIDUtil.getUUID());
-        return MapUtil.requestMap(session, Constant.NOT_SUCCESS_KEEP_LOGIN, Constant.BAD_REQUEST);
+        return MapUtil.requestMap(session, Constant.NOT_SUCCESS_KEEP_LOGIN);
 
     }
 
@@ -85,8 +85,8 @@ public class UserDomain {
         session.setSid(sid);
         boolean b = userMapper.sessionRemove(session);
         return b
-                ? MapUtil.requestUpdateMap(Constant.SUCCESS_REQUEST,Constant.GOOD_REQUEST,1,Constant.SUCCESS_LOGINOUT)
-                : MapUtil.requestMap(null, Constant.NOT_SUCCESS_REMOVE, Constant.BAD_REQUEST);
+                ? MapUtil.requestUpdateMap(Constant.SUCCESS_REQUEST, 1,Constant.SUCCESS_LOGINOUT)
+                : MapUtil.requestMap(null, Constant.NOT_SUCCESS_REMOVE);
     }
 
     /**
@@ -101,7 +101,7 @@ public class UserDomain {
         User loginUser = userMapper.login(user);
         if(loginUser == null)
         {
-            return MapUtil.requestMap(null,Constant.NOT_SUCCESS_LOGIN, Constant.BAD_REQUEST);
+            return MapUtil.requestMap(null,Constant.NOT_SUCCESS_LOGIN);
         }
         String truePwd = MD5Util.md5Encode(httpServletRequest.getParameter("password")) + loginUser.getSlat();
         String reqPwd = loginUser.getPassword();
@@ -116,13 +116,13 @@ public class UserDomain {
             Session session = userMapper.sessionModelByUuid(loginUser.getId());
             if(session != null)
             {
-                return MapUtil.requestMap(userMessage(session, loginUser), Constant.SUCCESS_REQUEST, Constant.GOOD_REQUEST);
+                return MapUtil.requestMap(userMessage(session, loginUser), Constant.SUCCESS_REQUEST);
             }
             Session reqSession = addSession(httpServletRequest, loginUser.getId(), UUIDUtil.getUUID());
 
-            return MapUtil.requestMap(userMessage(reqSession, loginUser), Constant.SUCCESS_REQUEST, Constant.GOOD_REQUEST);
+            return MapUtil.requestMap(userMessage(reqSession, loginUser), Constant.SUCCESS_REQUEST);
         }else {
-            return MapUtil.requestMap(null,Constant.NOT_SUCCESS_LOGINERROR, Constant.BAD_REQUEST);
+            return MapUtil.requestMap(null,Constant.NOT_SUCCESS_LOGINERROR);
         }
     }
 
@@ -138,7 +138,7 @@ public class UserDomain {
         Session session = getSessionBySid(httpServletRequest.getParameter("sid"));
         if(session == null || session.getUid().equals("0"))
         {
-            return MapUtil.requestMap(null,Constant.NOT_SUCCESS_KEEP_LOGIN, Constant.BAD_REQUEST);
+            return MapUtil.requestMap(null,Constant.NOT_SUCCESS_KEEP_LOGIN);
         }
         String pwd =  httpServletRequest.getParameter("password");
         String salt = UUIDUtil.getUUID().substring(0, 6);
@@ -146,7 +146,7 @@ public class UserDomain {
 
         if(userMapper.updateUserPwd(session.getUid(), mdPwd, salt,
                 httpServletRequest.getParameter("username")))
-            return MapUtil.requestUpdateMap(Constant.SUCCESS_REQUEST, Constant.GOOD_REQUEST, 1, Constant.SUCCESS_UPDATE);
+            return MapUtil.requestUpdateMap(Constant.SUCCESS_REQUEST, 1, Constant.SUCCESS_UPDATE);
         return null;
 
     }
@@ -158,7 +158,7 @@ public class UserDomain {
         Session session = getSessionBySid(httpServletRequest.getParameter("sid"));
         if(session == null || session.getUid().equals("0"))
         {
-            return MapUtil.requestMap(null,Constant.NOT_SUCCESS_KEEP_LOGIN, Constant.BAD_REQUEST);
+            return MapUtil.requestMap(null,Constant.NOT_SUCCESS_KEEP_LOGIN);
         }
 
         User_profile user_profile = new User_profile(httpServletRequest.getParameter("nickname"),
@@ -167,9 +167,9 @@ public class UserDomain {
         user_profile.setUid(session.getUid());
 
         if(!userMapper.userProfileEdit(user_profile))
-            return MapUtil.requestUpdateMap(Constant.NOT_SUCCESS_UPDATE, Constant.BAD_REQUEST, 0, Constant.NOT_SUCCESS_UPDATE);
+            return MapUtil.requestUpdateMap(Constant.NOT_SUCCESS_UPDATE, 0, Constant.NOT_SUCCESS_UPDATE);
 
-        return MapUtil.requestUpdateMap(Constant.SUCCESS_UPDATE, Constant.GOOD_REQUEST, 1, Constant.SUCCESS_UPDATE);
+        return MapUtil.requestUpdateMap(Constant.SUCCESS_UPDATE, 1, Constant.SUCCESS_UPDATE);
     }
 
 

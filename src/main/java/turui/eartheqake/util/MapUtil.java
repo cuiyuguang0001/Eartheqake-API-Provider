@@ -14,15 +14,14 @@ public class MapUtil {
      * 用于普通返回
      * @param list
      * @param msg
-     * @param ret
      * @return
      */
-    public static Map<String, Object> requestMap(List list, String msg, int ret)
+    public static Map<String, Object> requestMap(List list, String msg)
     {
         Map<String, Object> map = new HashMap<>();
         map.put("data", list);
         map.put("msg", msg);
-        map.put("ret", ret);
+        map.put("ret", 200);
         return map;
     }
 
@@ -30,15 +29,14 @@ public class MapUtil {
      * 用于普通单条信息返回
      * @param o
      * @param msg
-     * @param ref
      * @return
      */
-    public static Map<String, Object> requestMap(Object o, String msg, int ref)
+    public static Map<String, Object> requestMap(Object o, String msg)
     {
         Map<String, Object> map = new HashMap<>();
         map.put("data", o);
         map.put("msg", msg);
-        map.put("ret", ref);
+        map.put("ret", 200);
         return map;
     }
 
@@ -56,17 +54,25 @@ public class MapUtil {
      * 用于返回查询接口
      * @param list
      * @param msg
-     * @param ret
      * @param count
      * @return
      */
-    public static Map<String, Object> requestMap(List list, String msg, int ret, int count)
+    public static Map<String, Object> requestMap(List list, String msg, int count)
     {
         Map<String, Object> map = new HashMap<>();
         Map<String, Object> mapList = new HashMap<>();
         mapList.put("list", list);
         mapList.put("count", count);
         map.put("data", mapList);
+        map.put("msg", msg);
+        map.put("ret", 200);
+        return map;
+    }
+
+    public static Map<String, Object> requestMap(String msg, int ret)
+    {
+        Map<String, Object> map = new HashMap<>();
+        map.put("data", null);
         map.put("msg", msg);
         map.put("ret", ret);
         return map;
@@ -75,12 +81,11 @@ public class MapUtil {
     /**
      * 用于返回更新或添加的操作状态
      * @param msg
-     * @param ret
      * @param status
      * @param tip
      * @return
      */
-    public static Map<String, Object> requestUpdateMap(String msg, int ret, int status, String tip)
+    public static Map<String, Object> requestUpdateMap(String msg, int status, String tip)
     {
         Map<String, Object> map = new HashMap<>();
         Map<String, Object> mapList = new HashMap<>();
@@ -88,11 +93,11 @@ public class MapUtil {
         mapList.put("tip", tip);
         map.put("data", mapList);
         map.put("msg", msg);
-        map.put("ret", ret);
+        map.put("ret", 200);
         return map;
     }
 
-    public static Map<String ,Object> uploadMap(MyFile myFile, String url, String msg, int ret){
+    public static Map<String ,Object> uploadMap(MyFile myFile, String url, String msg){
         Map<String, Object> reqMap = new HashMap<>();
         Map<String, Object> map = new HashMap<>();
         map.put("code", 2);
@@ -101,7 +106,7 @@ public class MapUtil {
         map.put("file", myFile);
         reqMap.put("msg", msg);
         reqMap.put("data", map);
-        reqMap.put("ret", ret);
+        reqMap.put("ret", 200);
         return reqMap;
     }
 
