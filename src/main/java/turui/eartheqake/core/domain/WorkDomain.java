@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import turui.eartheqake.constant.Constant;
 import turui.eartheqake.core.mapper.FWDCMapper;
+import turui.eartheqake.core.mapper.FileMapper;
 import turui.eartheqake.core.mapper.WorkMapper;
 import turui.eartheqake.core.mapper.ZQJBMapper;
 import turui.eartheqake.core.pojo.file.ZF_file_follow;
@@ -115,7 +116,7 @@ public class WorkDomain {
      * @param httpServletRequest
      * @return
      */
-    public Map<String, Object> EqFormModZQJBAdd(HttpServletRequest httpServletRequest) {
+    public Map<String, Object> EqFormModZQJBAdd(HttpServletRequest httpServletRequest) throws Exception {
         LogUtil.doLog("EqFormModelZQJBAdd");
         //检查登陆状态
         Session session = userDomain.getSessionBySid(httpServletRequest.getParameter("sid"));
@@ -141,25 +142,57 @@ public class WorkDomain {
         eq.setData(data);
 
         eq.setFj((fileArray == null || fileArray.length == 0 || fileArray[0].equals("")) ? "0" : "1");
+        String mid = workMapper.eqFormRecordModel(httpServletRequest.getParameter("datakey"));
+        //检查是否是已经上传过的数据
+        if(mid != null)
+        {
+            eq.setMid(mid);
+            //修改数据
+            if(!zqjbMapper.zqjbEdit(eq) ||
+                    !workMapper.eqFormRecordEdit(eq.getXxmc(), eq.getXzq(), CommonUtil.getTineLine(),
+                            httpServletRequest.getParameter("datakey")))
+                throw new Exception("zqjb表修改失败");
 
-//        添加zqjb表信息
+            //修改file表数据
+            fileDomain.delFile(mid, fileArray);
+            //当需要添加的时候
+            if(fileArray != null){
+                if(!fileDomain.fileFollowAdd(mid, "eq_form_mod_zqjb", fileArray))
+                    throw new Exception("filefollow表添加失败");
+            }
+            return MapUtil.requestUpdateMap(Constant.SUCCESS_REQUEST, 1, Constant.SUCCESS_ADD);
+        }
+
+        //添加zqjb表信息
         if (zqjbMapper.zqjbAdd(eq)) {
-//            添加eq_form_mod_record表信息
+            //添加eq_form_mod_record表信息
             if (!eqFormModRecordAdd(eq.getXzq(), eq.getXxmc(), eq.getId() + "",
                     session.getUid(), dataMap.get("eqid"),
                     httpServletRequest.getParameter("datakey")))
-                return null;
-//            添加filefollow表信息
+                throw new Exception("record表添加失败");
+
+            //添加filefollow表信息
             if(eq.getFj().equals("0"))
                 if(!fileDomain.fileFollowAdd(eq.getId() + "", "eq_form_mod_zqjb", fileArray))
-                    return null;
+                    throw new Exception("filefollow表添加失败");
             return MapUtil.requestUpdateMap(Constant.SUCCESS_REQUEST, 1, Constant.SUCCESS_ADD);
-        } else {
-            return null;
         }
+        return null;
+
     }
 
+    public Map<String ,Object> EqFormRecordDel(HttpServletRequest httpServletRequest) throws Exception {
+        LogUtil.doLog("EqFormRecordDel");
+        //检查登陆状态
+        Session session = userDomain.getSessionBySid(httpServletRequest.getParameter("sid"));
+        if (session == null || session.getUid().equals("0"))
+            return MapUtil.requestMap(null, Constant.NOT_SUCCESS_KEEP_LOGIN);
 
+        String datakey = httpServletRequest.getParameter("datakey");
+        if (!workMapper.eqFormRecordDel(datakey))
+            throw new Exception("record删除失败");
+        return MapUtil.requestUpdateMap(Constant.SUCCESS_REMOVE, 1, Constant.SUCCESS_REMOVE);
+    }
 
     /**
      * ========================================fwdc==========================================
@@ -278,7 +311,7 @@ public class WorkDomain {
         form.setFormid(workMapper.eqFormList("zqjb").get(0).getId() + "");
         form.setMid(id);
         form.setDatakey(datakey);
-        return workMapper.EQFormRecordAdd(form);
+        return workMapper.eqFormRecordAdd(form);
     }
 
 }

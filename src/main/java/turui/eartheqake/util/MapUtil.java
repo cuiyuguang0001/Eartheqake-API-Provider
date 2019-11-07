@@ -20,7 +20,7 @@ public class MapUtil {
     {
         Map<String, Object> map = new HashMap<>();
         map.put("data", list);
-        map.put("msg", msg);
+        map.put("msg", "");
         map.put("ret", 200);
         return map;
     }
@@ -35,20 +35,10 @@ public class MapUtil {
     {
         Map<String, Object> map = new HashMap<>();
         map.put("data", o);
-        map.put("msg", msg);
+        map.put("msg", "");
         map.put("ret", 200);
         return map;
     }
-
-//    public static Map<String, Object> requestMap(List list, String msg, int ret, int count)
-//    {
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("data", list);
-//        map.put("msg", msg);
-//        map.put("ret", ret);
-//        map.put("count", count);
-//        return map;
-//    }
 
     /**
      * 用于返回查询接口
@@ -64,7 +54,7 @@ public class MapUtil {
         mapList.put("list", list);
         mapList.put("count", count);
         map.put("data", mapList);
-        map.put("msg", msg);
+        map.put("msg", "");
         map.put("ret", 200);
         return map;
     }
@@ -92,7 +82,8 @@ public class MapUtil {
         mapList.put("status", status);
         mapList.put("tip", tip);
         map.put("data", mapList);
-        map.put("msg", msg);
+        map.put("msg", "");
+//        map.put("msg", msg);
         map.put("ret", 200);
         return map;
     }
@@ -104,19 +95,10 @@ public class MapUtil {
         map.put("url", url);
         map.put("msg", msg);
         map.put("file", myFile);
-        reqMap.put("msg", msg);
+        reqMap.put("msg", "");
         reqMap.put("data", map);
         reqMap.put("ret", 200);
         return reqMap;
-    }
-
-    public static Map<String ,Object> requestUserMap(Map data, String msg, int ret)
-    {
-        Map<String, Object> map = new HashMap<>();
-        map.put("data", data);
-        map.put("msg", msg);
-        map.put("ret", ret);
-        return map;
     }
 
 }

@@ -100,7 +100,6 @@ public class MessageDomain {
                 if(m.getId().equals(mr.getMid()))
                 {
                     mr.setDateline(CommonUtil.timestampToStr(Long.valueOf(mr.getDateline())));
-//                    if(Long.valueOf(CommonUtil.getTineLine()) - Long.valueOf(mr.getDateline()) < 2592000)
                     m.setDateline(CommonUtil.timestampToStr(Long.valueOf(m.getDateline())));
                     mr.setData(m);
                 }

@@ -122,7 +122,7 @@ public class UserDomain {
 
             return MapUtil.requestMap(userMessage(reqSession, loginUser), Constant.SUCCESS_REQUEST);
         }else {
-            return MapUtil.requestMap(null,Constant.NOT_SUCCESS_LOGINERROR);
+            return MapUtil.requestUpdateMap(Constant.NOT_SUCCESS_LOGINERROR, 0, Constant.NOT_SUCCESS_LOGINERROR);
         }
     }
 
@@ -183,6 +183,7 @@ public class UserDomain {
      */
     public Session addSession(HttpServletRequest httpServletRequest, String uuid, String sid)
     {
+        LogUtil.doLog("addSession");
         Session session = new Session();
         String platform = httpServletRequest.getParameter("platform");
         if(platform == null)
@@ -205,12 +206,10 @@ public class UserDomain {
         //添加一条session信息
         if(userMapper.sessionAdd(session))//todo
         {
-            LogUtil.doLog("---------------------");
             return userMapper.sessionModelBySid(sid);
         }else
         {
             LogUtil.doLog("Session表添加失败");
-            LogUtil.doLog("---------------------");
             return null;
         }
     }

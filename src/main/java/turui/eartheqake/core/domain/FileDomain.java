@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -150,6 +151,8 @@ public class FileDomain {
         //file_follow表信息
         for(int i = 0; i < fileArray.length; i++)
         {
+            if(fileArray[i].equals("-1"))
+                continue;
             //创建实体类
             ZF_file_follow zf = new ZF_file_follow();
             zf.setDateline(CommonUtil.getTineLine());
@@ -162,6 +165,44 @@ public class FileDomain {
             }
         }
         return true;
+    }
+
+    /**
+     * 删除file中数据与文件
+     * @param mid
+     * @return
+     */
+    public String[] delFile(String mid, String[] fileArray) throws Exception {
+        List<String> fids = fileMapper.fileFollowByMid(mid);
+
+        if(fids == null || fids.size() == 0)
+            return null;
+
+        //查找需要删除的文件
+        for(int i = 0; i < fileArray.length; i++)
+        {
+            int j = fids.indexOf(fileArray[i]);
+            if(j != -1)
+            {
+                fids.remove(j);
+                fileArray[i] = "-1";
+            }
+        }
+        //当增加文件的时候
+        if(fids.size() == 0)
+        {
+            return fileArray;
+        }
+
+        //当文件需要删除的时候
+        for(String s : fids)
+        {
+            if(!fileMapper.fileFollowDel(mid,s))
+                throw new Exception("fileFollow删除失败");
+
+        }
+
+        return null;
     }
 
 }

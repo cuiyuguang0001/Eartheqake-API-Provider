@@ -22,6 +22,17 @@ public class EQ_from_mod_zqjb {
     //json
     private String data;
 
+    //用于record表联动
+    private String mid;
+
+    public String getMid() {
+        return mid;
+    }
+
+    public void setMid(String mid) {
+        this.mid = mid;
+    }
+
     public String getData() {
         return data;
     }

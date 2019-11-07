@@ -35,13 +35,14 @@ public interface WorkMapper {
             "(SELECT A.*, ROWNUM RN FROM zf_eq_form_record A WHERE ROWNUM <= #{n} " +
             "and eqid = #{eqid} " +
             "and formid = #{formid} " +
-            "and uuid = #{uid})" +
+            "and uuid = #{uid} " +
+            "and status = 1)" +
             "where RN > #{p} order by dateline desc")
     @Results(value = {
             @Result(column = "uuid", property = "uid")
     })
     List<EQ_form_record> eqFormRecordList(String eqid, String formid, String uid, int p, int n);
-    @Select("select count(0) from zf_eq_form_record where eqid = #{eqid} and formid = #{formid} and uuid = #{uid}")
+    @Select("select count(0) from zf_eq_form_record where eqid = #{eqid} and formid = #{formid} and uuid = #{uid} and status = 1")
     int eqFormRecordListCount(String eqid, String formid, String uid);
 
     /**
@@ -57,7 +58,34 @@ public interface WorkMapper {
      * @param eq
      * @return
      */
-    @Insert("insert into zf_eq_form_record(eqid, formid, uuid, title, address, dateline, datakey) " +
-            "values(#{eqid}, #{formid}, #{uid}, #{title}, #{address}, #{dateline}, #{datakey})")
-    boolean EQFormRecordAdd(EQ_form_record eq);
+    @Insert("insert into zf_eq_form_record(eqid, formid, uuid, title, address, dateline, datakey, mid, status) " +
+            "values(#{eqid}, #{formid}, #{uid}, #{title}, #{address}, #{dateline}, #{datakey}, #{mid}, 1)")
+    boolean eqFormRecordAdd(EQ_form_record eq);
+
+    /**
+     * 通过datakey查找一条record数据
+     * @param datakey
+     * @return
+     */
+    @Select("select mid from zf_eq_form_record where datakey = #{datakey} and status = 1")
+    String eqFormRecordModel(String datakey);
+
+    /**
+     * 更改一条record表数据
+     * @param title
+     * @param address
+     * @param dateline
+     * @param datakey
+     * @return
+     */
+    @Update("update zf_eq_form_record set title = #{title}, address = #{address}, dateline = #{dateline} where datakey = #{datakey}")
+    boolean eqFormRecordEdit(String title, String address, String dateline, String datakey);
+
+    /**
+     * 删除一条record数据
+     * @param datakey
+     * @return
+     */
+    @Update("update zf_eq_form_record set status = 0 where datakey = #{datakey}")
+    boolean eqFormRecordDel(String datakey);
 }
